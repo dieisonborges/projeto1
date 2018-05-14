@@ -22,6 +22,14 @@ class ProdutosController extends Controller
     }
 
     public function store(Request $request){
+    	//Validacao
+    	$this->validate($request,[
+    		'sku' => 'required|unique:produtos|min:3',
+    		'titulo' => 'required|min:3',
+    		'descricao' => 'required|min:10',
+    		'preco' => 'required|numeric',
+
+    	]);
     	$produto = new Produtos();
     	$produto->sku = $request->input('sku');
     	$produto->titulo = $request->input('titulo');
