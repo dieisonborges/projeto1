@@ -2,15 +2,27 @@
 @section('title', 'Lista de Produtos')
 @section('content')
 	<h1>Produtos</h1>
-	
-		<div class="alert alert-danger">
-			<ul>
-				@foreach($errors->all() as $error)
-				<li>{{$error}}</li>
-				@endforeach				
-			</ul>
+	@if($message = Session::get('success'))
+		<div class="alert alert-success">
+				{{$message}}
 		</div>
-	
+	@endif
+
+	<div class="row">
+		<div class="col-md-12">
+			<form method="POST" action="{{url('produtos/busca')}}">
+				@csrf
+				<div class="input-group mb-3">
+					<input type="text" id="busca" name="busca" class="form-control" placeholder="Procurar produto no site..." value="{{$buscar}}">	
+					<div class="input-group-append">
+						<button class="btn btn-outline-secondary">Buscar</button>
+						
+					</div>					
+				</div>				
+			</form>			
+		</div>		
+	</div>	
+
 	<div class="row">
 		@foreach($produtos as $produto)
 		<div class="col-md-3">			

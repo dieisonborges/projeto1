@@ -9,7 +9,7 @@ class ProdutosController extends Controller
 {
     public function index(){
     	$produtos = Produtos::all();
-    	return view('produtos.index', array('produtos' => $produtos));
+    	return view('produtos.index', array('produtos' => $produtos, 'buscar' => null));
     }
 
     public function show($id){
@@ -77,7 +77,18 @@ class ProdutosController extends Controller
 
     public function destroy($id){
         $produto = Produtos::find($id);
+        if(file_exists('./img/produtos/'.md5($id).'.jpg')){
+            unlink('./img/produtos/'.md5($id).'.jpg');
+        }
         $produto->delete();
-        return redirect()->back()->with('success', 'Produto Atualizado com Sucesso!');
+        return redirect()->back()->with('success', 'Produto Deletado com Sucesso!');
+    }
+
+    public function busca(Request $request){
+        $buscaInput = $request->input('busca');
+        $produtos = Produtos::where('titulo','LIKE','%'.$buscaInput.'%')
+                            ->orwhere('descricao','LIKE','%'.$buscaInput.'%')
+                            ->get();
+        return view('produtos.index', array('produtos' => $produtos, 'buscar' => $buscaInput));
     }
 }
